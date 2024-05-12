@@ -7,47 +7,55 @@
 using namespace std;
 class Event {
 	public:
-		virtual void occur(bool highSecurity) = 0; // Pure virtual function with security level parameter
+		virtual void occur(bool highSecurity) = 0;
 };
 
 class Spaceship {
 	public:
 		int health;
-		Spaceship() : health(100) {} // Initialize health to 100
+		Spaceship() : health(100) {}
 };
 
-void basicAttack(Spaceship ship, bool highSecurity) {
-	int damage = rand() % 10 + 10; // Random damage between 10 and 20
+int basicAttack(Spaceship ship, bool highSecurity) {
+	int damage = rand() % 10 + 10;
 	if (highSecurity) {
-		damage -= 5; // Decrease damage by 5 if high security
-
+		damage -= 5;
 	}
 	ship.health -= damage;
 	cout << "Your spaceship took " << damage << " damage from the pirate's basic attack!\n";
+
+	Sleep(2000);
 	if (ship.health <= 0) {
 		cout << "Your spaceship has been destroyed!" << endl;
-		exit(0); // Exit the game if spaceship health reaches 0
+		Sleep(2000);
+		exit(0);
 	}
+	return damage;
 }
 
-void heavyAttack(Spaceship ship, bool highSecurity) {
-	int damage = rand() % 20 + 15; // Random damage between 20 and 35
+int heavyAttack(Spaceship ship, bool highSecurity) {
+	int damage = rand() % 20 + 15;
 	if (!highSecurity) {
-		damage += 5; // Increase damage by 5 if low security
+		damage += 5;
 
 	}
 	ship.health -= damage;
 
 	cout << "Your spaceship took " << damage << " damage from the pirate's heavy attack!\n";
+
+	Sleep(2000);
 	if (ship.health <= 0) {
 		cout << "Your spaceship has been destroyed!" << endl;
-		exit(0); // Exit the game if spaceship health reaches 0
+		Sleep(2000);
+		exit(0);
 	}
+	return damage;
 }
+
 
 class SpacePirateAttack : public Event,public Spaceship {
 	public:
-		void occur(bool highSecurity)  { // Override the occur function with the security level parameter
+		void occur(bool highSecurity)  {
 			cout << "ALERT!!! Space Pirate Attack Detected!" << endl;
 			Sleep(1500);
 			cout << "Incoming enemy ships are targeting our trade routes!" << endl;
@@ -56,53 +64,33 @@ class SpacePirateAttack : public Event,public Spaceship {
 			cout << "All hands to battle stations!" << endl;
 			Sleep(1500);
 
-			int numPirates = rand() % 5 + 1; // Random number of pirate ships (1 to 5)
+			int numPirates = rand() % 5 + 1;
 			if (numPirates == 1) {
 				cout << "Enemy force detected: " << numPirates << " pirate ship approaching!\n";
 			} else {
 				cout << "Enemy force detected: " << numPirates << " pirate ships approaching!\n";
 			}
-			cout << "\n\t***Brace for impact!***\n" << endl;
+			cout << "\n\t<<<<<<-Brace for impact!->>>>>>\n" << endl;
 			Sleep(4000);
-			Spaceship playerShip; // Create player's spaceship object
+			Spaceship Ship;
 			for (int i = 1; i <= numPirates; ++i) {
 				cout << "(!) Engaging enemy ship " + to_string(i) + "..." << endl;
-				int attackType = rand() % 2; // Randomly select attack type
+				int attackType = rand() % 2;
 				switch (attackType) {
 					case 0:
-						basicAttack(playerShip, highSecurity);
+						Ship.health-=basicAttack(Ship, highSecurity);
 						break;
 					case 1:
-						heavyAttack(playerShip, highSecurity);
+						Ship.health-=heavyAttack(Ship, highSecurity);
 						break;
 				}
-				cout << "\nREMAINING HEALTH: " << playerShip.health << "%\n" << endl;
+				cout << "\nREMAINING HEALTH: " << Ship.health << "%\n" << endl;
 				Sleep(2000);
 			}
 
 			cout << "Space pirate threat neutralized. Returning to normal operations.";
-		}
-};
-
-class DistanceAndCost {
-	private:
-		double distance; // in light-years
-		int cost; // in gold coins
-	public:
-		// Constructor
-		DistanceAndCost() {}
-		DistanceAndCost(double dist, int c) : distance(dist), cost(c) {}
-		DistanceAndCost(const DistanceAndCost &obj) {
-			distance = obj.distance;
-			cost = obj.cost;
-		}
-
-		// Getter methods
-		double getDistance() const {
-			return distance;
-		}
-		int getCost() const {
-			return cost;
+			Sleep(1000);
+			system("cls");
 		}
 };
 
@@ -135,7 +123,7 @@ class Planet {
 	public:
 		Resourse *resources_available;
 		Planet() {
-			resources_available = new Resourse[3]; // Allocate memory for 3 resource strings
+			resources_available = new Resourse[3];
 		}
 		Planet(string n,double d) {
 			Name = n;
@@ -152,10 +140,10 @@ class Planet {
 			return distance;
 		}
 
-		// Method to set the available resources
+
 		void setResourcesAvailable(string array1[3],string array2[3],string array3[3],string array4[3]) {
 			for (int i = 0; i < 3; i++) {
-				resources_available[i].resourse = array1[i]; // Copy each resource from the array
+				resources_available[i].resourse = array1[i];
 				resources_available[i].type = array2[i];
 				resources_available[i].rarity = array3[i];
 				resources_available[i].description = array4[i];
@@ -163,9 +151,9 @@ class Planet {
 		}
 
 		~Planet() {
-			delete[] resources_available; // Free the allocated memory for resources
+			delete[] resources_available;
 		}
-		friend DistanceAndCost calculateDistanceAndCost(const Planet& planet1, const Planet& planet2, bool highSecurity);
+		friend void calculateDistanceAndCost(const Planet& planet1, const Planet& planet2, bool highSecurity);
 
 
 };
@@ -192,31 +180,94 @@ class Demand_Resources : public Planet {
 		}
 
 };
+void drawShip(int x) {
+	for (int i = 0; i < x; ++i) {
+		cout << " ";
+	}
+	cout << " ^/|\\  " << endl;
+	for (int i = 0; i < x; ++i) {
+		cout << " ";
+	}
+	cout << " v\\|/ " << endl;
+	for (int i = 0; i < x; ++i) {
+		cout << " ";
+	}
 
-DistanceAndCost calculateDistanceAndCost(Planet planet1,Demand_Resources planet2, bool highSecurity) {
+}
+void fun(bool highsecurity) {
+	int startX = 0;
+	int endX = 20;
+	int currentX = startX;
+	SpacePirateAttack ship;
+	int random = rand() %10;
+	while (currentX <= endX) {
+		system("cls");
+		drawShip(currentX);
+		Sleep(1000);
+		currentX++;
+		if(currentX == random) {
+			ship.occur(highsecurity);
+		}
+
+	}
+}
+void travelSequence(bool highSecurity) {
+	cout << "Initiating space travel sequence...\n";
+	Sleep(1000);
+	cout << "Preparing engines...\n";
+	Sleep(2000);
+	cout << "Engines primed. Initiating takeoff...\n";
+	Sleep(3000);
+	cout << "Liftoff! The spaceship is now on its way to the destination...\n";
+	Sleep(5000);
+	cout << "Traveling through hyperspace...\n";
+
+	fun(highSecurity);
+
+
+	Sleep(7000);
+	cout << "Approaching destination...\n";
+	Sleep(3000);
+	cout << "Entering orbit...\n";
+	Sleep(2000);
+	cout << "Spacecraft successfully entered orbit around the destination planet.\n";
+	Sleep(1000);
+	cout << "Preparing to dock...\n";
+	Sleep(2000);
+	cout << "Docking sequence initiated...\n";
+	Sleep(3000);
+	cout << "Ship has reached its destination!\n"
+	     << "Contact your nearest Report centre to recieve your shipment\n\t\tHappy Trading ^_^"<<endl;
+	Sleep(2000);
+}
+
+
+void calculateDistanceAndCost(Planet planet1,Demand_Resources planet2, bool highSecurity) {
 	double distance = planet2.getDistance()-planet1.getDistance();
 	int cost;
 
-	// Custom pricing scheme based on the distance and security level
+
 	if (distance >= 1 && distance <= 200) {
-		cost = 300; // $300 gold coins per light-year
+		cost = 300;
 	} else if (distance >=201 && distance <= 1000) {
-		cost = 400; // $400 gold coins per light-year
+		cost = 400;
 	} else if (distance >= 1001 && distance <= 100000) {
-		cost = 650; // $650 gold coins per light-year
+		cost = 650;
 	} else {
-		cost = 1000; // $50 gold coins per light-year
+		cost = 1000;
 	}
 
-	// Adjust cost based on security level
+
 	if (highSecurity) {
-		cost += 150; // $150 additional gold coins for high security
+		cost += 150;
 	} else {
-		cost += 70; // $70 additional gold coins for low security
+		cost += 70;
 	}
-	DistanceAndCost calculation(distance,cost);
+	cout<<"Travel cost : "<<cost<<endl;
+	Sleep(1000);
+	system("cls");
+	travelSequence(highSecurity);
 
-	return calculation;
 }
 
 Resourse need(char x) {
@@ -228,6 +279,12 @@ Resourse need(char x) {
 			trade.type = "Energy";
 			trade.rarity = "Rare";
 			trade.description = "Essential energy source for Transformers.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'b':
@@ -236,6 +293,12 @@ Resourse need(char x) {
 			trade.type = "Material";
 			trade.rarity = "Medium";
 			trade.description = "Advanced material with unique properties.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'c':
@@ -244,6 +307,12 @@ Resourse need(char x) {
 			trade.type = "Metal";
 			trade.rarity = "Exotic";
 			trade.description = "Versatile alloys used in construction and technology.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'd':
@@ -252,6 +321,12 @@ Resourse need(char x) {
 			trade.type = "Mineral";
 			trade.rarity = "Rare";
 			trade.description = "Radioactive mineral harmful to Kryptonians.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'e':
@@ -260,6 +335,12 @@ Resourse need(char x) {
 			trade.type = "Technology";
 			trade.rarity = "Rare";
 			trade.description = "Advanced technology remnants of Krypton.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'f':
@@ -268,6 +349,12 @@ Resourse need(char x) {
 			trade.type = "Crystal";
 			trade.rarity = "Medium";
 			trade.description = "Mystical crystals with unique properties.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'g':
@@ -276,6 +363,12 @@ Resourse need(char x) {
 			trade.type = "Mineral";
 			trade.rarity = "Rare";
 			trade.description = "Highly valuable mineral with anti-gravity properties.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'h':
@@ -284,6 +377,12 @@ Resourse need(char x) {
 			trade.type = "Flora";
 			trade.rarity = "Medium";
 			trade.description = "Bioluminescent plant used for energy.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'i':
@@ -292,6 +391,12 @@ Resourse need(char x) {
 			trade.type = "Flora";
 			trade.rarity = "Common";
 			trade.description = "Medicinal plant revered by Na'vi.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 
@@ -301,6 +406,12 @@ Resourse need(char x) {
 			trade.type = "Energy";
 			trade.rarity = "Rare";
 			trade.description = "Rare energy crystal with powerful properties.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 		case 'k':
 		case 'K':
@@ -308,6 +419,12 @@ Resourse need(char x) {
 			trade.type = "Metal";
 			trade.rarity = "Common";
 			trade.description = "Versatile metal used in various industries.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'l':
@@ -316,6 +433,12 @@ Resourse need(char x) {
 			trade.type = "Flora";
 			trade.rarity = "Medium";
 			trade.description = "Medicinal plant with time-altering effects.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'm':
@@ -324,6 +447,12 @@ Resourse need(char x) {
 			trade.type = "Gas";
 			trade.rarity = "Rare";
 			trade.description = "Gas harvested from nebulas for advanced propulsion.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'n':
@@ -332,6 +461,12 @@ Resourse need(char x) {
 			trade.type = "Flora";
 			trade.rarity = "Medium";
 			trade.description = "Bioluminescent plant with bioengineering applications.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'o':
@@ -340,6 +475,12 @@ Resourse need(char x) {
 			trade.type = "Metal";
 			trade.rarity = "Rare";
 			trade.description = "High-density metal for starship construction.";
+			cout<<"You have select :\n"
+			    <<"Resource    : "<<trade.resourse<<"\n"
+			    <<"Type        : "<<trade.type<<"\n"
+			    <<"Rarity      : "<<trade.rarity<<"\n"
+			    <<"Description : "<<trade.description<<endl;
+
 			break;
 
 		case 'x' :
@@ -370,6 +511,7 @@ void Deal() {
 		    <<"1 Common rarity resource for 1 medium rarity resource\n\n"
 		    <<"\tNow it's a deal or not(1/0)";
 		cin>>deal2;
+		system("cls");
 		if(deal2=='1') {
 			cout<<"Your order will soon be sent to the shipment.\n";
 		} else {
@@ -378,6 +520,7 @@ void Deal() {
 		}
 	}
 }
+
 
 int main() {
 	srand(time(NULL));
@@ -388,81 +531,308 @@ int main() {
 	Demand_Resources obj;
 	Resourse obj1;
 	Planet origin("Ragnork",0);
-	DistanceAndCost result;
 	SpacePirateAttack ship;
-	cout << "--------Welcome-------" << endl
-	     << "1. Cybertron" << endl
-	     << "2. Krypton" << endl
-	     << "3. Pandora" << endl
-	     << "4. Aldoria" << endl
-	     << "5. Nebulon-9"<< endl
-	     << "Choose a planet (1-5): ";
-	cin >> choice_planet;
+	do {
+		cout << "--------Welcome-------" << endl
+		     << "1. Cybertron" << endl
+		     << "2. Krypton" << endl
+		     << "3. Pandora" << endl
+		     << "4. Aldoria" << endl
+		     << "5. Nebulon-9"<< endl
+		     << "6. Exit "<<endl
+		     << "Choose a planet (1-5): ";
+		cin >> choice_planet;
 
-	switch (choice_planet) {
-		case '1':
-			obj.setName("Cybertron");
-			cout << "Enter its distance from Ragnork (in light years(1-100000)): ";
-			cin >> distance;
-			obj.setDistance(distance);
-			system("cls");
-
-			initial_Resources[0] = "Energon";
-			Type[0] = "Energy";
-			Rarity[0] = "Rare";
-			Description[0]= "Essential energy source for Transformers";
-			initial_Resources[1] = "Cybermatter";
-			Type[1] = "Material";
-			Rarity[1] = "Medium";
-			Description[1]= "Advanced material with unique properties";
-			initial_Resources[2] = "Iridium alloys";
-			Type[1] = "Matel";
-			Rarity[1] = "Common";
-			Description[1]= "Versatile alloys used in construction and technology.";
-			obj.setResourcesAvailable(initial_Resources,Type,Rarity,Description);
-
-			do {
-				cout<<"[A] Energon    [B] Cybermatter                     [C] Iridium Alloys \n"
-				    <<"[D] Kryptonite [E] Kryptonian Technology Artifacts [F] Rare Crystals \n"
-				    <<"[G] Unobtanium [H] Helicoradian                    [I] Eywa's Blessing \n"
-				    <<"[J] Solarite   [K] Quicksilver                     [L] Chrono Blossom \n"
-				    <<"[M] Nebula Gas [N] Exo-Flora                       [O] Neutronite\n"
-				    <<"[X] Exit\n"
-				    <<"Select Resources you need or press x:";
-				cin>>choice_resources;
+		switch (choice_planet) {
+			case '1':
+				obj.setName("Cybertron");
+				cout << "Enter its distance from Ragnork (in light years(1-100000)): ";
+				cin >> distance;
+				obj.setDistance(distance);
 				system("cls");
-				obj1 = need(choice_resources);
-				if (obj.resources_needed.size() > 0) {
-					obj.resources_needed[0] = obj1; // Assigning to existing element
-				} else {
-					// If resources_needed is empty, use push_back to add obj1
-					obj.resources_needed.push_back(obj1);
-				}
-			} while (choice_resources !='x' && choice_resources != 'X');
-			Deal();
 
-			cout << "Enter security level (1 for high, 0 for low): ";
-			cin >> highSecurity;
-			system("cls");
+				initial_Resources[0] = "Energon";
+				Type[0] = "Energy";
+				Rarity[0] = "Rare";
+				Description[0]= "Essential energy source for Transformers";
+				initial_Resources[1] = "Cybermatter";
+				Type[1] = "Material";
+				Rarity[1] = "Medium";
+				Description[1]= "Advanced material with unique properties";
+				initial_Resources[2] = "Iridium alloys";
+				Type[2] = "Matel";
+				Rarity[2] = "Common";
+				Description[2]= "Versatile alloys used in construction and technology.";
+				obj.setResourcesAvailable(initial_Resources,Type,Rarity,Description);
+
+				do {
+					cout<<"[A] Energon    [B] Cybermatter                     [C] Iridium Alloys \n"
+					    <<"[D] Kryptonite [E] Kryptonian Technology Artifacts [F] Rare Crystals \n"
+					    <<"[G] Unobtanium [H] Helicoradian                    [I] Eywa's Blessing \n"
+					    <<"[J] Solarite   [K] Quicksilver                     [L] Chrono Blossom \n"
+					    <<"[M] Nebula Gas [N] Exo-Flora                       [O] Neutronite\n"
+					    <<"[X] Exit\n"
+					    <<"Select Resources you need or press x : ";
+					cin>>choice_resources;
+					if(choice_resources == 'x') {
+						if(obj.resources_needed.empty()) {
+							return 0;
+						}
+					}
+					system("cls");
+					obj1 = need(choice_resources);
+					if (obj.resources_needed.size() > 0) {
+						obj.resources_needed[0] = obj1;
+					} else {
+
+						obj.resources_needed.push_back(obj1);
+					}
+				} while (choice_resources !='x' && choice_resources != 'X');
+				Deal();
+
+				cout << "Enter security level (1 for high, 0 for low): ";
+				cin >> highSecurity;
+				system("cls");
 
 
-			result = calculateDistanceAndCost(origin, obj, highSecurity);
-
-			cout << "Travel cost: " << result.getCost() << " gold coins" << endl;
-			Sleep(1000);
-			system("cls");
-			ship.occur(highSecurity);
+				calculateDistanceAndCost(origin, obj, highSecurity);
 
 
-//////CASE->1//////////
-			break;
 
-		// Add cases for other planets (Krypton, Pandora)
 
-		default:
-			cout << "Invalid choice. Please choose a valid planet." << endl;
-			break;
-	}
+
+				break;
+
+			case '2':
+				obj.setName("Krypton");
+				cout << "Enter its distance from Ragnork (in light years(1-100000)): ";
+				cin >> distance;
+				obj.setDistance(distance);
+				system("cls");
+
+				initial_Resources[0] = "Kryptonite";
+				Type[0] = "Mineral";
+				Rarity[0] = "Rare";
+				Description[0]= "Radioactive mineral harmful to Kryptonians.";
+				initial_Resources[1] = "Kryptonian Technology Artifacts";
+				Type[1] = "Technology";
+				Rarity[1] = "Rare";
+				Description[1]= "Advanced technology remnants of Krypton.";
+				initial_Resources[2] = "Rare Crystals";
+				Type[2] = "Crystals";
+				Rarity[2] = "Medium";
+				Description[2]= "Mystical crystals with unique properties.";
+				obj.setResourcesAvailable(initial_Resources,Type,Rarity,Description);
+
+				do {
+					cout<<"[A] Energon    [B] Cybermatter                     [C] Iridium Alloys \n"
+					    <<"[D] Kryptonite [E] Kryptonian Technology Artifacts [F] Rare Crystals \n"
+					    <<"[G] Unobtanium [H] Helicoradian                    [I] Eywa's Blessing \n"
+					    <<"[J] Solarite   [K] Quicksilver                     [L] Chrono Blossom \n"
+					    <<"[M] Nebula Gas [N] Exo-Flora                       [O] Neutronite\n"
+					    <<"[X] Exit\n"
+					    <<"Select Resources you need or press x : ";
+					cin>>choice_resources;
+					if(choice_resources == 'x') {
+						if(obj.resources_needed.empty()) {
+							return 0;
+						}
+					}
+					system("cls");
+					obj1 = need(choice_resources);
+					if (obj.resources_needed.size() > 0) {
+						obj.resources_needed[0] = obj1;
+					} else {
+
+						obj.resources_needed.push_back(obj1);
+					}
+				} while (choice_resources !='x' && choice_resources != 'X');
+				Deal();
+
+				cout << "Enter security level (1 for high, 0 for low): ";
+				cin >> highSecurity;
+				system("cls");
+
+
+				calculateDistanceAndCost(origin, obj, highSecurity);
+
+
+				break;
+
+			case '3':
+				obj.setName("Pandora");
+				cout << "Enter its distance from Ragnork (in light years(1-100000)): ";
+				cin >> distance;
+				obj.setDistance(distance);
+				system("cls");
+
+				initial_Resources[0] = "Unobtanium";
+				Type[0] = "Mineral";
+				Rarity[0] = "Rare";
+				Description[0]= "Highly valuable mineral with anti-gravity properties.";
+				initial_Resources[1] = "Helicoradian";
+				Type[1] = "Flora";
+				Rarity[1] = "Medium";
+				Description[1]= "Bioluminescent plant used for energy.";
+				initial_Resources[2] = "Eywa's Blessing";
+				Type[2] = "Flora";
+				Rarity[2] = "Common";
+				Description[2]= "Medicinal plant revered by Na'vi.";
+				obj.setResourcesAvailable(initial_Resources,Type,Rarity,Description);
+
+				do {
+					cout<<"[A] Energon    [B] Cybermatter                     [C] Iridium Alloys \n"
+					    <<"[D] Kryptonite [E] Kryptonian Technology Artifacts [F] Rare Crystals \n"
+					    <<"[G] Unobtanium [H] Helicoradian                    [I] Eywa's Blessing \n"
+					    <<"[J] Solarite   [K] Quicksilver                     [L] Chrono Blossom \n"
+					    <<"[M] Nebula Gas [N] Exo-Flora                       [O] Neutronite\n"
+					    <<"[X] Exit\n"
+					    <<"Select Resources you need or press x : ";
+					cin>>choice_resources;
+					if(choice_resources == 'x') {
+						if(obj.resources_needed.empty()) {
+							return 0;
+						}
+					}
+					system("cls");
+					obj1 = need(choice_resources);
+					if (obj.resources_needed.size() > 0) {
+						obj.resources_needed[0] = obj1;
+					} else {
+
+						obj.resources_needed.push_back(obj1);
+					}
+				} while (choice_resources !='x' && choice_resources != 'X');
+				Deal();
+
+				cout << "Enter security level (1 for high, 0 for low): ";
+				cin >> highSecurity;
+				system("cls");
+
+
+				calculateDistanceAndCost(origin, obj, highSecurity);
+
+				break;
+
+			case '4':
+
+				obj.setName("Aldoria");
+				cout << "Enter its distance from Ragnork (in light years(1-100000)): ";
+				cin >> distance;
+				obj.setDistance(distance);
+				system("cls");
+
+				initial_Resources[0] = "Solarite";
+				Type[0] = "Energy";
+				Rarity[0] = "Rare";
+				Description[0]= "Rare energy crystal with powerful properties.";
+				initial_Resources[1] = " Quicksilver";
+				Type[1] = "Metal";
+				Rarity[1] = "Common";
+				Description[1]= "Versatile metal used in various industries.";
+				initial_Resources[2] = "Chrono Blossom";
+				Type[2] = "Flora";
+				Rarity[2] = "Common";
+				Description[2]= "Medicinal plant with time-altering effects.";
+				obj.setResourcesAvailable(initial_Resources,Type,Rarity,Description);
+
+				do {
+					cout<<"[A] Energon    [B] Cybermatter                     [C] Iridium Alloys \n"
+					    <<"[D] Kryptonite [E] Kryptonian Technology Artifacts [F] Rare Crystals \n"
+					    <<"[G] Unobtanium [H] Helicoradian                    [I] Eywa's Blessing \n"
+					    <<"[J] Solarite   [K] Quicksilver                     [L] Chrono Blossom \n"
+					    <<"[M] Nebula Gas [N] Exo-Flora                       [O] Neutronite\n"
+					    <<"[X] Exit\n"
+					    <<"Select Resources you need or press x : ";
+					cin>>choice_resources;
+					if(choice_resources == 'x') {
+						if(obj.resources_needed.empty()) {
+							return 0;
+						}
+					}
+					system("cls");
+					obj1 = need(choice_resources);
+					if (obj.resources_needed.size() > 0) {
+						obj.resources_needed[0] = obj1;
+					} else {
+
+						obj.resources_needed.push_back(obj1);
+					}
+				} while (choice_resources !='x' && choice_resources != 'X');
+				Deal();
+
+				cout << "Enter security level (1 for high, 0 for low): ";
+				cin >> highSecurity;
+				system("cls");
+
+
+				calculateDistanceAndCost(origin, obj, highSecurity);
+
+
+				break;
+
+			case '5':
+				obj.setName("Nebulon-9");
+				cout << "Enter its distance from Ragnork (in light years(1-100000)): ";
+				cin >> distance;
+				obj.setDistance(distance);
+				system("cls");
+
+				initial_Resources[0] = "Nebula Gas";
+				Type[0] = "Gas";
+				Rarity[0] = "Rare";
+				Description[0]= "Gas harvested from nebulas for advanced propulsion.";
+				initial_Resources[1] = " Exo-Flora";
+				Type[1] = "Flora";
+				Rarity[1] = "Medium";
+				Description[1]= "Bioluminescent plant with bioengineering applications.";
+				initial_Resources[2] = "Neutronite";
+				Type[2] = "Metal";
+				Rarity[2] = "Rare";
+				Description[2]= "High-density metal for starship construction.";
+				obj.setResourcesAvailable(initial_Resources,Type,Rarity,Description);
+
+				do {
+					cout<<"[A] Energon    [B] Cybermatter                     [C] Iridium Alloys \n"
+					    <<"[D] Kryptonite [E] Kryptonian Technology Artifacts [F] Rare Crystals \n"
+					    <<"[G] Unobtanium [H] Helicoradian                    [I] Eywa's Blessing \n"
+					    <<"[J] Solarite   [K] Quicksilver                     [L] Chrono Blossom \n"
+					    <<"[M] Nebula Gas [N] Exo-Flora                       [O] Neutronite\n"
+					    <<"[X] Exit\n"
+					    <<"Select Resources you need or press x : ";
+					cin>>choice_resources;
+					if(choice_resources == 'x') {
+						if(obj.resources_needed.empty()) {
+							return 0;
+						}
+					}
+					system("cls");
+					obj1 = need(choice_resources);
+					if (obj.resources_needed.size() > 0) {
+						obj.resources_needed[0] = obj1;
+					} else {
+						obj.resources_needed.push_back(obj1);
+					}
+				} while (choice_resources !='x' && choice_resources != 'X');
+				Deal();
+
+				cout << "Enter security level (1 for high, 0 for low): ";
+				cin >> highSecurity;
+				system("cls");
+
+
+				calculateDistanceAndCost(origin, obj, highSecurity);
+
+
+				break;
+			case '6':
+				cout<<"Good Bye ^_^"<<endl;
+				break;
+			default:
+				cout << "Invalid choice. Please choose a valid planet." << endl;
+				break;
+		}
+	} while(choice_planet !='6');
 
 	return 0;
 }
