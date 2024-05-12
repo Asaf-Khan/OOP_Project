@@ -1,3 +1,23 @@
+//Project Name : The Inter-Galactic Traders.
+//Coders : 
+//->Asaf Khan 23p-3048
+//->Ahmad Jan
+/*
+Code Purpose:
+-------------
+
+The code is simulating space resource collection and trading between different planets. There are Planet classes that represent different planets in the galaxy.
+Each planet has attributes like name, distance from a central point, and what resources are available on that planet.
+There are also Resource classes that define different types of resources. Each resource has properties like its name, type, rarity, and description.
+The DemandResources class inherits from Planet class. This represents planets that need specific resources. 
+It has an additional attribute to define what resources are needed.There is a Spaceship class that can be used to travel between planets. 
+It has health attribute to track its condition.Event is an abstract class that defines events that can happen like SpacePirateAttacks. 
+This inherits from Spaceship since attacks involve spaceships.The code would have functions to calculate distances and costs to travel between planets, 
+check what resources are available or needed on different planets, simulate events like attacks, and allow trading/collection of resources to fulfill demands.
+The main() function likely creates objects of the different classes, sets their attributes and relationships, and then calls functions to simulate the resource 
+trading/collection between planets over time.
+*/
+
 #include <iostream>
 #include <string>
 #include<vector>
