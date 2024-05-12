@@ -1,7 +1,7 @@
 //Project Name : The Inter-Galactic Traders.
-//Coders : 
+//Coders :
 //->Asaf Khan 23p-3048
-//->Ahmad Jan
+//->Ahmad Jan 23p-3007
 /*
 Code Purpose:
 -------------
@@ -9,12 +9,12 @@ Code Purpose:
 The code is simulating space resource collection and trading between different planets. There are Planet classes that represent different planets in the galaxy.
 Each planet has attributes like name, distance from a central point, and what resources are available on that planet.
 There are also Resource classes that define different types of resources. Each resource has properties like its name, type, rarity, and description.
-The DemandResources class inherits from Planet class. This represents planets that need specific resources. 
-It has an additional attribute to define what resources are needed.There is a Spaceship class that can be used to travel between planets. 
-It has health attribute to track its condition.Event is an abstract class that defines events that can happen like SpacePirateAttacks. 
-This inherits from Spaceship since attacks involve spaceships.The code would have functions to calculate distances and costs to travel between planets, 
+The DemandResources class inherits from Planet class. This represents planets that need specific resources.
+It has an additional attribute to define what resources are needed.There is a Spaceship class that can be used to travel between planets.
+It has health attribute to track its condition.Event is an abstract class that defines events that can happen like SpacePirateAttacks.
+This inherits from Spaceship since attacks involve spaceships.The code would have functions to calculate distances and costs to travel between planets,
 check what resources are available or needed on different planets, simulate events like attacks, and allow trading/collection of resources to fulfill demands.
-The main() function likely creates objects of the different classes, sets their attributes and relationships, and then calls functions to simulate the resource 
+The main() function likely creates objects of the different classes, sets their attributes and relationships, and then calls functions to simulate the resource
 trading/collection between planets over time.
 */
 
@@ -287,6 +287,13 @@ void calculateDistanceAndCost(Planet planet1,Demand_Resources planet2, bool high
 	Sleep(1000);
 	system("cls");
 	travelSequence(highSecurity);
+	cout<<"Your resources are : "<<endl;
+	for (size_t i = 0; i < planet2.resources_needed.size(); ++i) {
+		cout <<"Resource    : "<< planet2.resources_needed[i].resourse <<endl
+		     <<"Type        : "<<planet2.resources_needed[i].type<<endl
+		     <<"Rarity      : "<<planet2.resources_needed[i].rarity<<endl
+		     <<"Description : "<<planet2.resources_needed[i].description<<endl;
+	}
 
 }
 
@@ -552,9 +559,10 @@ int main() {
 	Resourse obj1;
 	Planet origin("Ragnork",0);
 	SpacePirateAttack ship;
+	cout << "--------Welcome to The Inter-Galactic Traders-------" << endl;
 	do {
-		cout << "--------Welcome-------" << endl
-		     << "1. Cybertron" << endl
+
+		cout << "1. Cybertron" << endl
 		     << "2. Krypton" << endl
 		     << "3. Pandora" << endl
 		     << "4. Aldoria" << endl
@@ -601,12 +609,7 @@ int main() {
 					}
 					system("cls");
 					obj1 = need(choice_resources);
-					if (obj.resources_needed.size() > 0) {
-						obj.resources_needed[0] = obj1;
-					} else {
-
-						obj.resources_needed.push_back(obj1);
-					}
+					obj.resources_needed.push_back(obj1);
 				} while (choice_resources !='x' && choice_resources != 'X');
 				Deal();
 
@@ -660,12 +663,10 @@ int main() {
 					}
 					system("cls");
 					obj1 = need(choice_resources);
-					if (obj.resources_needed.size() > 0) {
-						obj.resources_needed[0] = obj1;
-					} else {
 
-						obj.resources_needed.push_back(obj1);
-					}
+
+					obj.resources_needed.push_back(obj1);
+
 				} while (choice_resources !='x' && choice_resources != 'X');
 				Deal();
 
@@ -716,12 +717,7 @@ int main() {
 					}
 					system("cls");
 					obj1 = need(choice_resources);
-					if (obj.resources_needed.size() > 0) {
-						obj.resources_needed[0] = obj1;
-					} else {
-
-						obj.resources_needed.push_back(obj1);
-					}
+					obj.resources_needed.push_back(obj1);
 				} while (choice_resources !='x' && choice_resources != 'X');
 				Deal();
 
@@ -772,12 +768,7 @@ int main() {
 					}
 					system("cls");
 					obj1 = need(choice_resources);
-					if (obj.resources_needed.size() > 0) {
-						obj.resources_needed[0] = obj1;
-					} else {
-
-						obj.resources_needed.push_back(obj1);
-					}
+					obj.resources_needed.push_back(obj1);
 				} while (choice_resources !='x' && choice_resources != 'X');
 				Deal();
 
@@ -828,11 +819,7 @@ int main() {
 					}
 					system("cls");
 					obj1 = need(choice_resources);
-					if (obj.resources_needed.size() > 0) {
-						obj.resources_needed[0] = obj1;
-					} else {
-						obj.resources_needed.push_back(obj1);
-					}
+					obj.resources_needed.push_back(obj1);
 				} while (choice_resources !='x' && choice_resources != 'X');
 				Deal();
 
